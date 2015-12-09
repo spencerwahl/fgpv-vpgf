@@ -14,7 +14,7 @@
         .module('app.layout')
         .controller('ShellController', ShellController);
 
-    function ShellController(configService, layoutService, $state, $rootScope, events) {
+    function ShellController(configService, $rootScope, events) {
         const self = this;
 
         self.config = configService.data;
