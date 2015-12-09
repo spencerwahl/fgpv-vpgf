@@ -19,7 +19,6 @@
 
         self.config = configService.data;
         self.isLoading = true;
-        self.$state = $state;
 
         // TODO: mock settings; replace by config
         self.menu = [
