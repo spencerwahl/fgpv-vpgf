@@ -224,11 +224,26 @@ gulp.task('translate', 'Split translation csv into internationalized files',
 gulp.task('jsrollup', 'Roll up all js into one file',
     ['jsinjector', 'validate', 'version', 'configdefaults'],
     function () {
-
         const jslib = libbuild();
         const jscache = templatecache();
         const jsapp = jsbuild();
-        const seed = gulp.src([config.jsGlobalRegistry, config.jsAppSeed])
+
+        const seedFiles = [config.jsGlobalRegistry];
+
+        // Protractor doesnt like manually bootstrapping apps so we need to get rid of appSeed.
+        // This introduces a problem for us;
+        // Angular tries to bootstrap apps once all the source tags have been run, since we have the angular library above our app
+        // in one file it tries to bootstrap before the app exists. To fix this we need to defer bootstrapping; we notify angular
+        // using window.name (in index-protractor) and then resume the bootstrap at the end of core.js (hence the appending to the template cache)
+        if (!args.protractor) {
+            // use app-seed
+            seedFiles.push(config.jsAppSeed);
+        } else {
+            // make sure we resume the deferred protractor-friendly bootstrap
+            jscache.pipe($.insert.append('angular.resumeBootstrap();'));
+        }
+
+        const seed = gulp.src(seedFiles)
             .pipe($.plumber({ errorHandler: injectError }))
             .pipe($.babel())
             .pipe($.if(args.prod, $.uglify()))

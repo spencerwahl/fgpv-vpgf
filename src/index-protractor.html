@@ -4,15 +4,20 @@
     <meta charset="utf-8">
     <title>title</title>
   </head>
-<body ng-app="app">
+<body ng-app="app" rv-config="config.en-CA.json">
     <!-- Protractor doesn't work well with manually bootstrapped apps, so we have to use ng-app tag and we just use a single app on the page. -->
 
-    <div class="fgpv" rv-config="config.en-CA.json" style="height: 100%;">
-        <rv-shell></rv-shell>
+    <div class="fgpv" style="height: 100%;">
+        <rv-shell class="md-body-1"></rv-shell>
     </div>
+
+    <script>
+        window.name = 'NG_DEFER_BOOTSTRAP!';
+    </script>
 
     <!-- inject:js -->
     <!-- endinject -->
+
 
 </body>
 </html>
