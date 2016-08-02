@@ -31,7 +31,10 @@
          * @returns {String}    The bookmark containing basemap, extent, layers and their options
          */
         function getBookmark() {
-            const basemap = encode64(geoService.mapManager.BasemapControl.basemapGallery.getSelected().id);
+            // const basemap = encode64(geoService.mapManager.BasemapControl.basemapGallery.getSelected().id);
+            const basemap = encode64(geoService.getCurrentBasemapId());
+            console.log(basemap);
+            console.log(geoService.getCurrentBasemapId());
 
             const mapExtent = geoService.mapObject.extent.getCenter();
 
@@ -77,6 +80,7 @@
                 /^(.+?)(\d{6})$/, // dynamic
                 /^(.+?)(\d{5})$/ // image
             ];
+            const blankBasemapIdPattern = 'blank_basemap_';
 
             bookmark = decodeURI(bookmark);
 
@@ -91,9 +95,18 @@
             config.map.initialBasemapId = basemap;
 
             // apply extent
-            const spatialReference = {
-                wkid: config.baseMaps.find(bm => bm.id === basemap).wkid
-            };
+            let spatialReference;
+            const currentBasemap = config.baseMaps.find(bm => bm.id === basemap);
+            if (currentBasemap) {
+                spatialReference = {
+                    wkid: currentBasemap.wkid
+                };
+            } else {
+                spatialReference = {
+                    wkid: basemap.slice(blankBasemapIdPattern.length)
+                };
+            }
+
             window.RV.getMap($rootElement.attr('id')).centerAndZoom(x, y, spatialReference, zoom);
 
             // Make sure there are layers before trying to loop through them

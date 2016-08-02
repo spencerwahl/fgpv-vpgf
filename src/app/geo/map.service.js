@@ -46,6 +46,7 @@
                 mapManager: null, // Object
 
                 baseMapHasSameSP,
+                getCurrentBasemapId,
                 setZoom,
                 shiftZoom,
                 selectBasemap,
@@ -220,10 +221,9 @@
                 } else {
 
                     if (id.startsWith('blank_basemap_')) {
-
+                        geoState.blankBaseMapId = id;
                         // get the current selected basemap id
                         const oldBaseMap = mapManager.BasemapControl.basemapGallery.getSelected();
-                        geoState.blankBaseMapId = oldBaseMap.id;
                         hideBaseMap(true);
 
                         // update id
@@ -275,6 +275,10 @@
 
                 return (oldWkid === newWkid);
 
+            }
+
+            function getCurrentBasemapId() {
+                return geoState.blankBaseMapId ? geoState.blankBaseMapId : geoState.selectedBaseMapId;
             }
 
             /**
@@ -555,29 +559,24 @@
             * @param {String} id of base map
             */
             function setSelectedBaseMap(id) {
-                geoState.selectedBaseMapId = id;
-
                 let selectedBaseMap;
 
                 // search base map config based on  'blank_basemap_' condition
                 if (!id.startsWith(blankBaseMapIdPattern)) {
-
                     selectedBaseMap = config.baseMaps.find(baseMap => {
-                        return (baseMap.id === geoState.selectedBaseMapId);
+                        return (baseMap.id === id);
                     });
-
                 } else {
+                    geoState.blankBaseMapId = id;
                     const wkid = parseInt(id.slice(blankBaseMapIdPattern.length, id.length));
 
                     // find the first base map that has the matching wkid
                     selectedBaseMap = config.baseMaps.find(baseMap => {
                         return (baseMap.wkid === wkid);
                     });
-
-                    geoState.blankBaseMapId = selectedBaseMap.id;
-                    geoState.selectedBaseMapId = selectedBaseMap.id;
                 }
 
+                geoState.selectedBaseMapId = selectedBaseMap.id;
                 // get selected base map extent set id, so we can store teh map extent
                 geoState.selectedBaseMapExtentSetId = selectedBaseMap.extentId;
                 geoState.selectedBaseMapLodId = selectedBaseMap.lodId;
@@ -586,7 +585,6 @@
                 geoState.mapExtent = gapiService.gapi.mapManager.getExtentFromJson(fullExtentJson);
 
                 geoState.lods = getLod(config.map.lods);
-
             }
 
             /**
@@ -684,7 +682,7 @@
 
                 // TODO: move geoState stuff outside of the hidebasemap
                 const mapManager = service.mapManager;
-                const basemap = mapManager.BasemapControl.basemapGallery.get(geoState.blankBaseMapId);
+                const basemap = mapManager.BasemapControl.basemapGallery.get(geoState.selectedBaseMapId);
 
                 const basemapLayers = basemap.getLayers();
 
