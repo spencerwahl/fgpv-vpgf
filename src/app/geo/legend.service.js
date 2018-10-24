@@ -902,7 +902,6 @@ function legendServiceFactory(
              * Flatten the tree of dynamic children and groups discarding all the group objects.
              *
              * @param {*} tree
-             * @returns
              */
             function _flattenTree(tree) {
                 const result = [].concat.apply(
