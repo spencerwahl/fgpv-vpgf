@@ -272,7 +272,7 @@ export class Panel {
     * @return {string} - the panel id
     */
     get id(): string {
-        return this.element.attr('id');
+        return this.element.attr('id')!;
     }
 
     private offScreenRuleCheck(errorMsg?: string) {
@@ -391,7 +391,7 @@ export class Panel {
         });
 
         // close the dialog when clicking on the backdrop
-        this.element.on('click', evt => {
+        this.element.on('click', (evt: any) => {
             if ($(evt.target).is(this.element)) {
                 this.close({ closingCode: CLOSING_CODES.CLICKEDOUTSIDE });
             }

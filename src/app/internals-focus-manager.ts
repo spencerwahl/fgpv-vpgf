@@ -71,7 +71,7 @@ export class InternalsFocusManager {
         let focusOut = false;
         let backtab = false;
         const activeElement = <any>document.activeElement;
-        const length = $(activeElement).val().length;
+        const length = (<string>$(activeElement).val())!.length;
         const isInputActive = activeElement.nodeName === 'INPUT' && length > 0;
         const selectionStart = activeElement.selectionStart;
 

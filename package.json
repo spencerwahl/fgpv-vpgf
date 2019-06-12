@@ -45,6 +45,7 @@
     "clean-webpack-plugin": "1.0.0",
     "copy-webpack-plugin": "4.6.0",
     "css-loader": "2.1.0",
+    "cypress": "^3.3.1",
     "docute-cli": "0.6.0",
     "eslint": "5.11.1",
     "eslint-loader": "2.1.1",
@@ -60,6 +61,7 @@
     "ng-annotate-loader": "0.6.1",
     "ngtemplate-loader": "2.0.1",
     "node-sass": "4.11.0",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "protractor": "5.4.2",
     "raw-loader": "1.0.0",
@@ -94,6 +96,9 @@
     "svgcache": "node scripts/svgCache.js",
     "angular-material": "node scripts/generateAngularMaterial.js",
     "docute": "docute ./docs",
-    "enhance-configs": "node scripts/enhanceConfigs.js"
+    "enhance-configs": "node scripts/enhanceConfigs.js",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "ci:test": "run-p --race \"server -s\" \"cypress:run\""
   }
 }

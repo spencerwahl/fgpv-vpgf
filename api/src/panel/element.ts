@@ -21,7 +21,7 @@ export default class Element {
      * Returns the element id.
      */
     get id(): string {
-        return this.elem.attr('id');
+        return this.elem.attr('id')!;
     }
 
     /**
