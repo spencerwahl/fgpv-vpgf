@@ -8,7 +8,6 @@ before_script:
 - echo -e "Host *\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
 script:
 - "./scripts/travis/build.sh"
-- export CYPRESS_BASE_URL="http://localhost:6002"
 - npm run ci:test
 cache:
   directories:

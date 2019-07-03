@@ -99,6 +99,6 @@
     "enhance-configs": "node scripts/enhanceConfigs.js",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "ci:test": "run-p --race \"server -s\" \"cypress:run\""
+    "ci:test": "run-p --race \"server -- -s\" \"cypress:run -- --config baseUrl=\"http://localhost:6002\"\""
   }
 }
