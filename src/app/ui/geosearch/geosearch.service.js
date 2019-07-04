@@ -34,6 +34,7 @@ function geosearchService(
             excludeTypes,
             settings
         });
+        console.log(appInfo.features.export);
     });
 
     const service = {

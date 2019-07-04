@@ -1,5 +1,6 @@
 const FileSaver = require('file-saver');
-const templateUrl = require('./export.html');
+const fancyTemplate = require('./export.html');
+const simpleTemplate = require('./export-simple.html')
 
 const EXPORT_IMAGE_GUTTER = 20; // padding around the export image
 const EXPORT_CLASS = '.rv-export';
@@ -18,7 +19,7 @@ const EXPORT_CLASS = '.rv-export';
  */
 angular.module('app.ui').service('exportService', exportService);
 
-function exportService($mdDialog, $mdToast, referenceService, configService, events) {
+function exportService($mdDialog, $mdToast, referenceService, configService, events, appInfo) {
     const service = {
         open,
         close
@@ -44,6 +45,8 @@ function exportService($mdDialog, $mdToast, referenceService, configService, eve
      */
     function open(event, fileType = 'png') {
         const shellNode = referenceService.panels.shell;
+
+        const templateUrl = (appInfo.features.export ? simpleTemplate : fancyTemplate)
 
         $mdDialog.show({
             locals: {
@@ -111,19 +114,25 @@ function exportService($mdDialog, $mdToast, referenceService, configService, eve
 
         // updating export components will initialize them if this is called for the first time;
         exportComponentsService.init().then(() => {
-            updateComponents();
+            if (appInfo.features.export) {
+                return;
+                //Call whatever export plugin stuff needs to be called
+                //appInfo.features.export
+            } else {
+                updateComponents();
 
-            // title component is special since the user can modify its value; we expose it to bind the value to the input field
-            self.titleComponent = self.exportComponents.get('title');
-            self.mapComponent = self.exportComponents.get('map');
+                // title component is special since the user can modify its value; we expose it to bind the value to the input field
+                self.titleComponent = self.exportComponents.get('title');
+                self.mapComponent = self.exportComponents.get('map');
 
-            // watch for the selected option to change and update all the export components
-            self.scope.$watch('self.exportSizes.selectedOption', (newValue, oldValue) => {
-                if (oldValue !== newValue && newValue !== self.exportSizes.customOption) {
-                    self.exportSizes.customToggled = true;
-                    updateComponents();
-                }
-            });
+                // watch for the selected option to change and update all the export components
+                self.scope.$watch('self.exportSizes.selectedOption', (newValue, oldValue) => {
+                    if (oldValue !== newValue && newValue !== self.exportSizes.customOption) {
+                        self.exportSizes.customToggled = true;
+                        updateComponents();
+                    }
+                });
+            }
         });
 
         return;
