@@ -636,7 +636,9 @@ function exportGenerators(
      *
      * @param {Function} showToast a function display a toast notification for the user
      * @param {*} value HTML string
-     * @returns
+     * @return {Object} a result object in the form of { graphic, value }
+     *                  graphic {Canvas} - a resulting graphic
+     *                  value {Object} - a modified value passed from the ExportComponent
      */
     function customMarkupGenerator(showToast, value) {
         // NOTE: example
